@@ -58,6 +58,23 @@ NetBeans IDE
 8. double(浮点类型)
 
 
+### 简单的数据类型转换和类包装
+
+1. 各个类型之间转换的优先级关系
+byte，short，char -> int->long->float->double     
+2. 各个简单数据类型的自动转换规则
+3. 类型之间的强制转换
+4. 各个类型的包装类
+byte  Byte      
+boolean  Boolean        
+char  Character     
+double  Double      
+float Float     
+int Integer     
+long Long       
+short Short     
+
+
 
 
 
