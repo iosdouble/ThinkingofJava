@@ -41,6 +41,14 @@ public class Student {
 
     //成员方法
 
+
+    /**
+     * 普通方法的重载操作
+     *
+     * 构造方法的重载
+     *
+     */
+
     void setStudent(String name,String sex,String no){
         this.name = name;
         this.sex = sex;
