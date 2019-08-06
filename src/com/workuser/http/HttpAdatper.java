@@ -24,14 +24,9 @@ public class HttpAdatper {
 
     //‘/v1/login’, username=‘admin’, password=‘admin’
 
-    public static void main(String[] args) {
-
-
+    public  String getJsonString() {
         String token = getToken();
         System.out.println(token);
-
-
-
         //Authorization: Token  ee4f4e3135227aedf5d5fa557ae7bcd4f6daed8d
         //Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
         //              multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
@@ -45,27 +40,21 @@ public class HttpAdatper {
         requestHeader.put("Content-Type", "multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW");
         requestHeader.put("Authorization","Token  "+token);
         CloseableHttpResponse response = null;
-
         try {
             response = restClient.get(url, requestHeader);
             HttpEntity entity = response.getEntity();
             InputStream inputStream = entity.getContent();
-
             String string = exchange(inputStream);
             System.out.println(string);
 
-
-
+            return string;
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
+        return null;
     }
 
-    private static String getToken() {
-
+    private  String getToken() {
         RestClient restClient = new RestClient();
         String url = "http://10.115.254.14:8000/v1/login";
         HashMap<String, String> requestHeader = new HashMap<>();
@@ -97,16 +86,17 @@ public class HttpAdatper {
         return null;
     }
 
+
     public static String exchange(InputStream in){
         return exchange(in,"utf-8");
     }
+
     private static String exchange(InputStream in, String encode) {
 
         String str = "";
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(in, encode));
             StringBuffer sb = new StringBuffer();
-
             while ((str = reader.readLine()) != null) {
                 sb.append(str).append("\n");
             }
@@ -116,7 +106,6 @@ public class HttpAdatper {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return str;
     }
 }
