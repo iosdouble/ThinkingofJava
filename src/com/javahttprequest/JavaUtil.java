@@ -1,6 +1,6 @@
 package com.javahttprequest;
 
-import org.springframework.stereotype.Component;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
-@Component
 public class JavaUtil {
 
     // 发送GET请求

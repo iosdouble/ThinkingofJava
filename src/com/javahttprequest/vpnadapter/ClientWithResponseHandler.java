@@ -1,13 +1,14 @@
 package com.javahttprequest.vpnadapter;
 
-import com.gome.arch.web.business.haiyan.server.javahttprequest.adapter.HttpClientUtils;
-import com.gome.arch.web.business.haiyan.server.javahttprequest.adapter.Token;
-import com.gome.arch.web.business.haiyan.server.javahttprequest.vpnadapter.bean.VpnUserQueryParam;
-import com.gome.arch.web.business.haiyan.server.javahttprequest.vpnadapter.bean.VpnUserResult;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.javahttprequest.adapter.HttpClientUtils;
 import com.javahttprequest.adapter.Token;
 import com.javahttprequest.vpnadapter.bean.VpnUserQueryParam;
 import com.javahttprequest.vpnadapter.bean.VpnUserResult;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -22,7 +23,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
-import org.cat.core.util.json.JsonUtil;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -144,7 +144,7 @@ public class ClientWithResponseHandler {
             HttpEntity entity = closeableHttpResponse.getEntity();
             InputStream inputStream = entity.getContent();
             String str = exchange(inputStream);
-            Token tokenData = JsonUtil.toObject(str, Token.class);
+            Token tokenData = toObject(str, Token.class);
             return tokenData.getToken();
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,7 +160,7 @@ public class ClientWithResponseHandler {
         vpnUserResult.setAccount("huangyanlin");
         VpnUserQueryParam userQueryParam = new VpnUserQueryParam();
         userQueryParam.setList(vpnUserResult);
-        String paramjson = JsonUtil.toJson(userQueryParam);
+        String paramjson = toJson(userQueryParam);
         System.out.println(paramjson);
         try {
             String getTokenUrl = "https://10.75.65.10/rest_v2/";
@@ -175,5 +175,57 @@ public class ClientWithResponseHandler {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private static <T> String toJson(T t) {
+        if (t == null) {
+            return null;
+        } else {
+            ObjectMapper mapper = new ObjectMapper();
+            String json = null;
+
+            try {
+                json = mapper.writeValueAsString(t);
+                return json;
+            } catch (JsonProcessingException var4) {
+                var4.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private static <T> T toObject(String json, Class<T> clazz) {
+        return StringUtils.isBlank(json) ? null : toObject(json, (String) null, clazz);
+    }
+
+    private static <T> T toObject(String json, String path, Class<T> clazz) {
+        if (StringUtils.isBlank(json)) {
+            return null;
+        } else {
+            ObjectMapper mapper = new ObjectMapper();
+            T t = null;
+            if (StringUtils.isBlank(path)) {
+                try {
+                    t = mapper.readValue(json, clazz);
+                    return t;
+                } catch (IOException var7) {
+                    var7.printStackTrace();
+                }
+            } else {
+                try {
+                    JsonNode jsonRoot = mapper.readTree(json);
+                    JsonNode jsonNode = jsonRoot.at(path);
+                    if (jsonNode.isMissingNode()) {
+                        return t;
+                    } else {
+                        t = mapper.readValue(jsonNode.toString(), clazz);
+                        return t;
+                    }
+                } catch (IOException var8) {
+                    var8.printStackTrace();
+                }
+            }
+        }
+        return null;
     }
 }

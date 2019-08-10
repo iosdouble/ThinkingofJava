@@ -5,7 +5,6 @@ import org.apache.http.client.methods.*;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -19,7 +18,6 @@ import java.util.Map;
  * @Version 1.0
  */
 
-@Component
 public class RestClient {
 
     //1. Get 请求方法

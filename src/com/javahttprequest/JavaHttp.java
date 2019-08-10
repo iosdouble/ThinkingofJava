@@ -1,6 +1,5 @@
 package com.javahttprequest;
 
-import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -15,7 +14,7 @@ import java.net.URLConnection;
  * @Date 2019/6/14 15:47
  * @Version 1.1
  **/
-@Component
+
 public class JavaHttp {
 
     private String url = "";
